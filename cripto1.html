@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simulador de Clave Criptográfica</title>
+</head>
+<body>
+    <h1>Simulador de Clave Criptográfica</h1>
+    <form id="cryptoForm">
+        <label for="password">Ingrese su clave:</label>
+        <input type="text" id="password" required>
+        <button type="button" onclick="encryptKey()">Cifrar</button>
+        <button type="button" onclick="verifyKey()">Verificar</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        // Transformación de Hadamard
+        function applyHadamardTransformation(bit) {
+            const hadamardMatrix = [[1, 1], [1, -1]];
+            const result = [];
+
+            for (let i = 0; i < 2; i++) {
+                let sum = 0;
+                for (let j = 0; j < 2; j++) {
+                    sum += hadamardMatrix[i][j] * bit[j];
+                }
+                result.push(sum);
+            }
+
+            return result;
+        }
+
+        let encryptedKey = [];
+
+        // Función para cifrar la clave ingresada
+        function encryptKey() {
+            const inputPassword = document.getElementById("password").value;
+
+            if (inputPassword.length !== 4) {
+                document.getElementById("result").textContent = "La clave debe tener 4 dígitos.";
+                return;
+            }
+
+            encryptedKey = [];
+            for (let i = 0; i < 4; i++) {
+                const bit = [parseInt(inputPassword[i]), 0];
+                encryptedKey = encryptedKey.concat(applyHadamardTransformation(bit));
+            }
+
+            document.getElementById("result").textContent = "Clave cifrada.";
+        }
+
+        // Función para verificar la clave ingresada
+        function verifyKey() {
+            if (encryptedKey.length === 0) {
+                document.getElementById("result").textContent = "Cifre la clave primero.";
+                return;
+            }
+
+            const inputPassword = document.getElementById("password").value;
+            const inputKey = [];
+
+            for (let i = 0; i < 4; i++) {
+                const bit = [0, 0];
+                bit[1] = encryptedKey[i * 2 + 1] > encryptedKey[i * 2] ? 1 : 0;
+                inputKey.push(bit);
+            }
+
+            const decryptedKey = inputKey.join("");
+            if (decryptedKey === inputPassword) {
+                document.getElementById("result").textContent = "¡Clave correcta!";
+            } else {
+                document.getElementById("result").textContent = "Clave incorrecta";
+            }
+        }
+    </script>
+</body>
+</html>
