@@ -4,3 +4,4 @@ Utilizando tanto el puente como la transformación de Hadamar
 se realizan pruebas iniciales de criptografía básica 
 y computación cuántica
 
+Se añaden ejemplos de utilización básica en html+javascript y en php
